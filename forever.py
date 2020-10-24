@@ -12,9 +12,10 @@ from pathlib import Path
 from PIL import Image
 from pymongo import MongoClient
 
-IMAGE_PATH = "luhan1994.github.io/assets/"
-INDEX_PATH = "luhan1994.github.io/index.html"
-TEST_PATH = "luhan1994.github.io/index.html"
+FILE_PATH = os.path.split(os.path.realpath(__file__))[0] + os.sep
+IMAGE_PATH = FILE_PATH + "luhan1994.github.io/assets/"
+INDEX_PATH = FILE_PATH + "luhan1994.github.io/index.html"
+TEST_PATH = FILE_PATH + "luhan1994.github.io/test"
 
 def detect_face(image_path):
     print(image_path)
@@ -26,6 +27,9 @@ def detect_face(image_path):
         gray, scaleFactor=1.2, minNeighbors=5)
     if (len(faces) == 0):
         return None, None
+    for (x, y, w, h) in faces:
+        img = cv2.rectangle(img, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        cv2.imwrite(image_path, img)
     (x, y, w, h) = faces[0]
     return gray[y:y + w, x:x + h], faces[0]
 
